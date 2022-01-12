@@ -9,7 +9,7 @@ export default class Products extends BaseSchema {
       table.uuid('uid').notNullable()
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.uuid('user_uid').notNullable()
-      table.enu('day_type', ['high', 'medium', 'low']).defaultTo('active').notNullable()
+      table.enu('day_type', ['high', 'medium', 'low']).defaultTo('low').notNullable()
       table.integer('product_category_id').unsigned().references('id').inTable('product_categories')
       table.uuid('product_category_uid').notNullable()
       table.integer('product_sub_category_id')
