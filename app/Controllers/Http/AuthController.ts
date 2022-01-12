@@ -1,5 +1,4 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Redis from '@ioc:Adonis/Addons/Redis'
 import User from 'App/Models/User'
 
 import { signupRequest, signinRequest } from 'App/utils/validator.util'
@@ -29,10 +28,6 @@ export default class AuthController {
 
   public async currentUser ({ response, auth }: HttpContextContract) {
     try {
-      const cacheUser = await Redis.get(String(auth.user?.uid))
-      if (cacheUser !== null) {
-        return httpStatusResponse(response, 200, 'success', 'Current User', JSON.parse(cacheUser))
-      }
       const user = await User.query().where({
         uid: auth.user?.uid,
       })
@@ -41,7 +36,6 @@ export default class AuthController {
             category.preload('subCategories')
           }).preload('productSubCategory')
         })
-      await Redis.set(String(auth.user?.uid), JSON.stringify(user[0]))
       return httpStatusResponse(response, 200, 'success', 'Current User', user[0])
     } catch (error) {
       console.log(error)
